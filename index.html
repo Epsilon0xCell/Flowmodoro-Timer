@@ -8,6 +8,7 @@
 </head>
 <body>
 <main>
+  <!-- I keep the ids in this file and the lookups in app.js as one contract. If I rename an id here and not there, the script gets null and fails with no clear message. I check both files together when I rename anything. -->
   <h1>Flowmodoro</h1>
   <p class="sub">Focus as long as you flow. Your break is earned:
      one minute of rest for every five minutes of focus.</p>
@@ -23,6 +24,7 @@
     <p id="status">Press Start focus and work until your flow ends.</p>
   </section>
 
+  <!-- I leave the player area empty. My script builds the iframe only after a pasted link passes its check, so a bad link leaves this area empty instead of loading a broken player. -->
   <section class="ambience">
     <h2>Ambience - YouTube study space</h2>
     <label>Paste a YouTube video URL or ID:
@@ -32,12 +34,14 @@
     <div id="playerWrap"></div>
   </section>
 
+  <!-- I leave this list empty too. My script adds one entry each time a focus block or a break ends, newest first. -->
   <section class="log">
     <h2>Session log</h2>
     <ul id="logList"></ul>
     <p id="totals">Total focus: 0 min - Total break: 0 min</p>
   </section>
 </main>
+<!-- I put this script at the end of the body on purpose. app.js looks up its elements as soon as it loads, so every element above has to exist before this line runs. -->
 <script src="app.js"></script>
 </body>
 </html>
