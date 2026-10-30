@@ -50,18 +50,27 @@ function startFocus() {
   render();
 }
 
+// Every path back to idle (break finished, break ended early, too-short
+// focus, Reset) goes through here. This block used to be written out three
+// times with small differences, which is how a button label or a disabled
+// state gets fixed in two places and missed in the third. Only the status
+// line differs between the paths, so only the status line is a parameter.
+function toIdle(statusText) {
+  clearInterval(ticker);
+  mode = "idle";
+  phase.textContent = "Ready";
+  clock.textContent = "00:00";
+  status.textContent = statusText;
+  $("startBtn").disabled = false;
+  $("breakBtn").disabled = true;
+  $("breakBtn").textContent = "Take break";
+}
+
 function stopBreak(finished) {
   const used = Math.min(breakSeconds, (Date.now() - startedAt) / 1000);
   totalBreak += used;
   log(`Break: ${fmt(used)}${finished ? " (complete)" : " (ended early)"}`);
-  mode = "idle";
-  clearInterval(ticker);
-  phase.textContent = "Ready";
-  clock.textContent = "00:00";
-  status.textContent = "Break over. Start the next focus block when ready.";
-  $("startBtn").disabled = false;
-  $("breakBtn").disabled = true;
-  $("breakBtn").textContent = "Take break";
+  toIdle("Break over. Start the next focus block when ready.");
   totals();
 }
 
@@ -75,13 +84,7 @@ $("breakBtn").addEventListener("click", () => {
     log(`Focus: ${fmt(focusSec)} -> earned break: ${fmt(breakSeconds)}`);
     totals();
     if (breakSeconds < 1) {           // too short to bank a break
-      clearInterval(ticker);
-      mode = "idle";
-      phase.textContent = "Ready";
-      clock.textContent = "00:00";
-      status.textContent = "Under 5 seconds of focus - no break banked.";
-      $("startBtn").disabled = false;
-      $("breakBtn").disabled = true;
+      toIdle("Under 5 seconds of focus - no break banked.");
       return;
     }
     mode = "break";
@@ -96,19 +99,17 @@ $("breakBtn").addEventListener("click", () => {
 });
 
 $("resetBtn").addEventListener("click", () => {
-  clearInterval(ticker);
-  mode = "idle";
-  phase.textContent = "Ready";
-  clock.textContent = "00:00";
-  status.textContent = "Press Start focus and work until your flow ends.";
-  $("startBtn").disabled = false;
-  $("breakBtn").disabled = true;
-  $("breakBtn").textContent = "Take break";
+  toIdle("Press Start focus and work until your flow ends.");
 });
 
 $("loadBtn").addEventListener("click", () => {
   const raw = $("ytInput").value.trim();
-  const match = raw.match(/(?:v=|youtu\.be\/|embed\/)?([A-Za-z0-9_-]{11})/);
+  // Two accepted shapes only: a URL carrying v=, youtu.be/ or embed/, or a
+  // bare 11-character ID as the whole input. The first version of this
+  // regex made the URL prefix optional, which meant any 11 word characters
+  // anywhere in any pasted text "matched" and loaded as a video.
+  const match = raw.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/)
+    || raw.match(/^([A-Za-z0-9_-]{11})$/);
   if (!match) { status.textContent = "That does not look like a YouTube URL or ID."; return; }
   $("playerWrap").innerHTML =
     `<iframe src="https://www.youtube.com/embed/${match[1]}?rel=0"
