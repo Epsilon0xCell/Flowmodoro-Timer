@@ -1,0 +1,17 @@
+:root { color-scheme: dark; }
+body { font-family: system-ui, sans-serif; background:#0b0b10; color:#eee;
+       margin:0; display:flex; justify-content:center; }
+main { max-width: 720px; width: 100%; padding: 2rem 1rem 4rem; }
+h1 { font-size: 2.4rem; margin-bottom: .2rem; }
+.sub { color:#b8b8c8; }
+.timer-card, .ambience, .log { background:#15151f; border:1px solid #26263a;
+  border-radius: 12px; padding: 1.2rem; margin-top: 1.2rem; }
+#phase { text-transform: uppercase; letter-spacing: .15em; color:#a78bfa; }
+#clock { font-size: 4.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+button { background:#5b21b6; color:#fff; border:0; border-radius:8px;
+  padding:.6rem 1.1rem; font-size:1rem; cursor:pointer; margin-right:.5rem; }
+button:disabled { background:#33334a; cursor:not-allowed; }
+input { width: 100%; padding:.55rem; border-radius:8px; border:1px solid #33334a;
+  background:#0b0b10; color:#eee; margin:.4rem 0 .8rem; }
+iframe { width:100%; aspect-ratio:16/9; border:0; border-radius:8px; margin-top:.8rem; }
+#status { color:#b8b8c8; }

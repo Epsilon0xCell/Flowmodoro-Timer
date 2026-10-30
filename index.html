@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flowmodoro Timer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Flowmodoro</h1>
+  <p class="sub">Focus as long as you flow. Your break is earned:
+     one minute of rest for every five minutes of focus.</p>
+
+  <section class="timer-card">
+    <div id="phase">Ready</div>
+    <div id="clock">00:00</div>
+    <div class="controls">
+      <button id="startBtn">Start focus</button>
+      <button id="breakBtn" disabled>Take break</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+    <p id="status">Press Start focus and work until your flow ends.</p>
+  </section>
+
+  <section class="ambience">
+    <h2>Ambience - YouTube study space</h2>
+    <label>Paste a YouTube video URL or ID:
+      <input id="ytInput" type="text" placeholder="https://www.youtube.com/watch?v=...">
+    </label>
+    <button id="loadBtn">Load ambience</button>
+    <div id="playerWrap"></div>
+  </section>
+
+  <section class="log">
+    <h2>Session log</h2>
+    <ul id="logList"></ul>
+    <p id="totals">Total focus: 0 min - Total break: 0 min</p>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
