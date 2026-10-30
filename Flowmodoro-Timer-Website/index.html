@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- pages-campaign site for Epsilon0xCell/Flowmodoro-Timer; source of truth: Flowmodoro-Timer-Website/ on the default branch -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flowmodoro-Timer - focus as long as you flow</title>
+<style>
+/* I kept this page pale and quiet on purpose. The timer itself runs on a near black page, but this page is about reading, and I wanted the one violet from style.css to be the only loud thing here. */
+:root{--ink:#191922;--soft:#5a5a6a;--paper:#f7f5f0;--violet:#5b21b6;--violet-soft:#a78bfa;--line:#ddd8cc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;line-height:1.65}
+.wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+header.top{padding:34px 0 0;display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+.wordmark{font-weight:700;letter-spacing:.02em}
+.top nav a{color:var(--violet);text-decoration:none;margin-left:18px;font-size:.95rem}
+.top nav a:hover{text-decoration:underline}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;padding:56px 0 30px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+.kicker{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet);margin:0 0 14px}
+h1{font-size:2.5rem;line-height:1.12;margin:0 0 18px;font-weight:650}
+.lede{font-size:1.13rem;color:var(--soft);max-width:34rem;margin:0}
+.hero-art img{max-width:100%;display:block}
+/* I drew the ring at 25 minutes because that is the example everyone reaches for, and at a ratio of 5 it lands on a clean 5 minute break. The ring in the real app is a text clock, not a ring, and I say so under it so nobody thinks the app looks like this page. */
+.clockbox{text-align:center}
+.bigtime{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:4.6rem;font-weight:700;line-height:1;margin-top:-148px}
+.ringnote{color:var(--soft);font-size:.92rem;max-width:19rem;margin:118px auto 0}
+.badges{display:flex;flex-wrap:wrap;gap:8px;padding:20px 0 6px}
+.badges img{height:20px}
+section{padding:38px 0;border-top:1px solid var(--line)}
+h2{font-size:1.45rem;margin:0 0 16px;font-weight:650}
+p{max-width:44rem}
+.ratio{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);margin:24px 0}
+@media(max-width:760px){.ratio{grid-template-columns:1fr}}
+.ratio div{padding:20px 22px;border-right:1px solid var(--line)}
+.ratio div:last-child{border-right:0}
+.ratio b{display:block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.7rem;font-weight:700}
+.ratio span{color:var(--soft);font-size:.95rem}
+ul.facts{list-style:none;padding:0;margin:0;max-width:46rem}
+ul.facts li{padding:13px 0;border-bottom:1px solid var(--line)}
+ul.facts li:last-child{border-bottom:0}
+ul.facts b{font-weight:650}
+code,pre{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+pre{background:#191922;color:#f0edf7;padding:18px 20px;overflow-x:auto;font-size:.93rem;line-height:1.55}
+pre .c{color:#a78bfa}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{border:1px solid var(--ink);padding:4px 13px;border-radius:999px;font-size:.9rem}
+.note{border-left:3px solid var(--violet);padding:4px 0 4px 18px;max-width:44rem}
+footer{padding:34px 0 52px;border-top:1px solid var(--line);color:var(--soft);font-size:.95rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--violet);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="wordmark">Flowmodoro-Timer</div>
+  <nav>
+    <a href="https://github.com/Epsilon0xCell/Flowmodoro-Timer">Repository</a>
+    <a href="https://github.com/Epsilon0xCell">My GitHub profile</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div>
+    <p class="kicker">A timer that counts up</p>
+    <h1>Focus as long as you flow. The break takes care of itself.</h1>
+    <p class="lede">Custom flowmodoro website utilizing YouTube study spaces to create ambience. That is the whole pitch, in the words from my README, because the tool really is that small.</p>
+    <div class="badges">
+      <img alt="GitHub stars" src="https://img.shields.io/github/stars/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=stars">
+      <img alt="GitHub forks" src="https://img.shields.io/github/forks/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=forks">
+      <img alt="Last commit" src="https://img.shields.io/github/last-commit/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=last%20commit">
+      <img alt="Top language" src="https://img.shields.io/github/languages/top/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6">
+      <img alt="Repository size" src="https://img.shields.io/github/repo-size/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=size">
+      <img alt="License" src="https://img.shields.io/github/license/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6">
+    </div>
+  </div>
+  <div class="hero-art">
+    <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/banner.png" alt="Flowmodoro-Timer banner from the repository">
+    <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/logo.png" alt="Flowmodoro-Timer logo from the repository" style="max-width:120px;margin-top:18px">
+  </div>
+</div>
+
+<div class="clockbox" aria-hidden="true">
+  <!-- I set the ring stroke by hand for this one static example: 25 minutes in, the ring sits almost closed, with the small gap left for the break still to come. It is an illustration of the ratio, not a live widget. -->
+  <svg width="230" height="230" viewBox="0 0 230 230" role="img" aria-label="Progress ring showing a 25 minute focus session">
+    <circle cx="115" cy="115" r="96" fill="none" stroke="#ddd8cc" stroke-width="10"/>
+    <circle cx="115" cy="115" r="96" fill="none" stroke="#5b21b6" stroke-width="10" stroke-linecap="round" stroke-dasharray="502 603" transform="rotate(-90 115 115)"/>
+  </svg>
+  <div class="bigtime">25:00</div>
+  <p class="ringnote">Twenty five minutes of focus on the clock banks a break of 05:00. In app.js the clock is plain text in a dark card. The ring lives only on this page, as a picture of the ratio.</p>
+</div>
+
+<section>
+  <h2>What this is</h2>
+  <p>I built this because a normal pomodoro kept cutting me off mid thought. A set target rings whether the work is done or not. Flowmodoro flips that around. I press Start focus and the clock counts up from 00:00 with no target at all. I stop when the flow stops, and the app works out what break I earned.</p>
+  <p>The math is one line in app.js. A constant named RATIO holds 5, and my break is my focus time divided by that. Work 25 minutes, rest 5. Work 50 minutes, rest 10. Work 30 seconds in a test and I bank 6 seconds, which the deep check on this repo actually ran and watched count down. Under 5 seconds of focus banks nothing, and the app says so instead of starting a break that ends at once.</p>
+  <p>The third piece is ambience. I paste a YouTube study space link into the box and it loads as an embedded player under the timer. That is the full tool: index.html, style.css, and app.js at 165 lines. No build step, no account, no server of mine in the middle.</p>
+</section>
+
+<section>
+  <h2>The ratio, worked out</h2>
+  <div class="ratio">
+    <div><b>25:00</b><span>of focus, stopped when the flow ends</span></div>
+    <div><b>1 / 5</b><span>the RATIO constant in app.js, the one number that sets every break</span></div>
+    <div><b>05:00</b><span>of break, counted down, then back to Ready</span></div>
+  </div>
+  <p>The break is not a running balance. I recompute it each time a focus block ends, and if I end a break early I only get credit for the part I used. Reset throws the current phase away on purpose. Focus time before a Reset never reaches the totals, and the code comments in app.js say that plainly so nobody has to guess.</p>
+</section>
+
+<section>
+  <h2>What it does, as written</h2>
+  <ul class="facts">
+    <li><b>Three states only.</b> The mode variable is always idle, focus, or break. Every button handler branches on it, and one helper named toIdle sends every path back to Ready so a button label cannot get fixed in two places and missed in a third.</li>
+    <li><b>Time comes from the wall clock.</b> render() subtracts startedAt from Date.now() instead of counting ticks, so a background tab that throttles the 250 millisecond interval loses smoothness, not accuracy.</li>
+    <li><b>A session log and totals.</b> Each finished or cut short block adds a line, newest first, set with textContent so log text is never read as markup. Totals stay in seconds and round only when shown.</li>
+    <li><b>A strict YouTube check.</b> The loader accepts a URL carrying v=, a youtu.be/ link, an embed link, or a bare 11 character video ID as the whole input. A normal sentence that happens to hold an 11 character word is rejected. My first version accepted that, and I tightened it.</li>
+    <li><b>Tabular numbers.</b> style.css sets font-variant-numeric on the clock so a 1 takes the same width as an 8 and the readout does not jitter every second.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Run it</h2>
+  <p>Open index.html in any browser, or serve the folder:</p>
+  <pre><span class="c"># from the repo root, either way works</span>
+python3 -m http.server
+<span class="c"># then open http://localhost:8000 in a browser</span></pre>
+  <div class="chips">
+    <span>JavaScript</span><span>HTML</span><span>CSS</span><span>No build step</span>
+  </div>
+</section>
+
+<section>
+  <h2>One honest note</h2>
+  <p class="note">This is a single page tool that lives entirely in your browser tab. Close the tab and the session log and totals are gone. I did not add storage, accounts, or sync, because I use it for one sitting at a time and that is the job it was built for.</p>
+  <p>Code and full history: <a href="https://github.com/Epsilon0xCell/Flowmodoro-Timer">github.com/Epsilon0xCell/Flowmodoro-Timer</a>.</p>
+</section>
+
+<footer>
+  <span>Built by Epsilon0xCell</span>
+  <span>Flowmodoro-Timer - app.js, index.html, style.css, and nothing else.</span>
+</footer>
+
+</div>
+</body>
+</html>
