@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!-- pages-campaign site for Epsilon0xCell/Flowmodoro-Timer; source of truth: Flowmodoro-Timer-Website/ on the default branch -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flowmodoro-Timer: the clock is the page</title>
+<meta name="description" content="I rebuilt this page around a working flowmodoro clock. Focus counts up, stopping banks a break at a ratio of 5 to 1, and the break counts down.">
+<style>
+/* I kept the paper pale and the ink quiet because this page is a notebook first. The one loud color is the violet from the app itself, #5b21b6 in style.css, and I use it for the phase line, the buttons, and the break dot, nowhere else by accident. */
+:root{--ink:#1c1c24;--soft:#5d5d6d;--paper:#f7f5ef;--card:#fffdf8;--violet:#5b21b6;--violet-soft:#a78bfa;--line:#ddd7c8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.65}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+a{color:var(--violet)}
+header.top{padding:30px 0 0;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.02em}
+.brand img{width:40px;height:40px;object-fit:contain;display:block}
+.top nav a{text-decoration:none;margin-left:18px;font-size:.95rem}
+.top nav a:hover{text-decoration:underline}
+.badges{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 4px}
+.badges img{height:20px}
+.kicker{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet);margin:0 0 12px}
+h1{font-size:2.6rem;line-height:1.1;margin:0 0 16px;font-weight:650;max-width:22ch}
+h2{font-size:1.5rem;margin:0 0 14px;font-weight:650}
+h3{font-size:1.05rem;margin:0 0 8px;font-weight:650}
+p{max-width:44rem}
+.lede{font-size:1.12rem;color:var(--soft);max-width:36rem;margin:0}
+.banner{margin:28px 0 0}
+.banner img{width:100%;display:block;border:1px solid var(--line)}
+.banner figcaption,.sheet figcaption{color:var(--soft);font-size:.92rem;margin-top:8px}
+section{padding:40px 0;border-top:1px solid var(--line)}
+/* I made the clock room a card on the paper, not a dark panel. The app runs its clock on a dark card, and I say that in the text, but on this page I want the readout to feel like a number written large in a notebook margin. */
+.clockroom{background:var(--card);border:1px solid var(--line);padding:30px 28px 26px;margin:34px 0 8px}
+.phase{font-size:.85rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet);margin:0}
+.clock{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:clamp(4.8rem,14vw,9.5rem);font-weight:700;line-height:1.05;margin:6px 0 4px}
+.status{color:var(--soft);margin:0 0 18px;min-height:1.65em}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{background:var(--violet);color:#fff;border:0;border-radius:8px;padding:.62rem 1.15rem;font-size:1rem;cursor:pointer;font:inherit}
+button.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+button:disabled{background:#d8d2c2;color:#6d6d7a;cursor:not-allowed;border-color:#d8d2c2}
+.breakdot{width:14px;height:14px;border-radius:50%;background:var(--violet-soft);display:none;margin-left:6px}
+.breakdot.on{display:inline-block;animation:breathe 3.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.45);opacity:1}}
+.logwrap{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
+.logwrap ul{list-style:none;padding:0;margin:0 0 10px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.95rem}
+.logwrap li{padding:6px 0;border-bottom:1px solid var(--line)}
+.logwrap li:last-child{border-bottom:0}
+.totals{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.95rem;margin:0}
+.static-rule{color:var(--soft);max-width:44rem;margin:18px 0 0}
+.ratio{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);margin:24px 0;background:var(--card)}
+@media(max-width:760px){.ratio{grid-template-columns:1fr}.ratio div{border-right:0;border-bottom:1px solid var(--line)}.ratio div:last-child{border-bottom:0}}
+.ratio div{padding:20px 22px;border-right:1px solid var(--line)}
+.ratio div:last-child{border-right:0}
+.ratio b{display:block;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.9rem;font-weight:700}
+.ratio span{color:var(--soft);font-size:.95rem}
+table.worked{border-collapse:collapse;width:100%;max-width:44rem;margin:8px 0 20px;background:var(--card)}
+table.worked th,table.worked td{border:1px solid var(--line);padding:10px 14px;text-align:left;font-variant-numeric:tabular-nums}
+table.worked th{font-weight:650}
+code,pre{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+pre{background:#1c1c24;color:#f0edf7;padding:18px 20px;overflow-x:auto;font-size:.92rem;line-height:1.55}
+pre .c{color:var(--violet-soft)}
+ul.facts{list-style:none;padding:0;margin:0;max-width:46rem}
+ul.facts li{padding:13px 0;border-bottom:1px solid var(--line)}
+ul.facts li:last-child{border-bottom:0}
+.sheets{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:760px){.sheets{grid-template-columns:1fr}}
+.sheet{margin:0;background:var(--card);border:1px solid var(--line);padding:16px}
+.sheet img{width:100%;display:block}
+.note{border-left:3px solid var(--violet);padding:4px 0 4px 18px;max-width:44rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chips span{border:1px solid var(--ink);padding:4px 13px;border-radius:999px;font-size:.9rem}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.seen{opacity:1;transform:none}
+footer{padding:34px 0 52px;border-top:1px solid var(--line);color:var(--soft);font-size:.95rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{text-decoration:none}
+footer a:hover{text-decoration:underline}
+/* I turn the breathing and the reveals off for reduced motion, and I leave the clock alone. The clock is work the reader started with a button, not decoration, so it keeps counting in every mode. */
+@media (prefers-reduced-motion: reduce){
+.breakdot.on{animation:none}
+.reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand"><img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/logo.png" alt="Flowmodoro-Timer logo, a small mark from the repository"> Flowmodoro-Timer</div>
+  <nav>
+    <a href="https://github.com/Epsilon0xCell/Flowmodoro-Timer">Repository</a>
+    <a href="https://github.com/Epsilon0xCell">My GitHub profile</a>
+  </nav>
+</header>
+
+<p class="kicker" style="margin-top:38px">The clock is the page</p>
+<h1>Focus as long as you flow. The break takes care of itself.</h1>
+<p class="lede">I am Epsilon0xCell, and I built Flowmodoro-Timer as a timer with no target. On this page I replaced my old drawn ring with a working clock that runs the same rule as the app, and everything below it is the notebook that explains that rule.</p>
+
+<div class="badges">
+  <img alt="GitHub stars" src="https://img.shields.io/github/stars/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=stars">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=forks">
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=last%20commit">
+  <img alt="Top language" src="https://img.shields.io/github/languages/top/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=size">
+  <img alt="License MIT" src="https://img.shields.io/github/license/Epsilon0xCell/Flowmodoro-Timer?style=flat&color=5b21b6&label=license">
+</div>
+
+<figure class="banner">
+  <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/banner.png" alt="Flowmodoro-Timer banner image from the repository">
+  <figcaption>My banner for the project, from banner.png in the repository. The app itself is plainer than this: a text clock in a dark card, three buttons, and a YouTube box.</figcaption>
+</figure>
+
+<!-- I put the working clock first because it is the subject. The old version of this page drew a ring at 25:00 and explained that the real app shows text. I would rather show the text clock working than draw a picture of it. -->
+<section class="clockroom" id="clock-room" style="border-top:0">
+  <h2>The clock room</h2>
+  <p>This is a page version of the same rule the app runs. It is not a recording and it is not linked to the app. Press Start focus and it counts up. Press Take break and it banks a break from your focus time and counts that break down. The session log under it works the way the app log works, newest entry first.</p>
+  <p class="phase" id="phase">Ready</p>
+  <div class="clock" id="clock">00:00</div>
+  <p class="status" id="status">Press Start focus and work until your flow ends.</p>
+  <div class="controls">
+    <button id="startBtn" type="button">Start focus</button>
+    <button id="breakBtn" type="button" disabled>Take break</button>
+    <button id="resetBtn" type="button" class="secondary">Reset</button>
+    <span class="breakdot" id="breakDot" aria-hidden="true"></span>
+  </div>
+  <p class="static-rule">If the script does not run, the rule still reads plainly here: focus counts up from 00:00 with no set target, and when focus stops, the break is the focus time divided by 5, floored to whole seconds. Twenty five minutes of focus banks 05:00 of break. Fifty minutes banks 10:00. Thirty seconds banks 6 seconds. Under 5 seconds of focus banks no break at all.</p>
+  <div class="logwrap">
+    <h3>Session log</h3>
+    <ul id="logList"></ul>
+    <p class="totals" id="totals">Total focus: 0 min - Total break: 0 min</p>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2>The rule, worked out</h2>
+  <p>I built this because a set target kept ringing in the middle of a thought. Flowmodoro counts up instead. I stop when the flow ends, and one constant in app.js decides what I earned. That constant is named RATIO, it holds 5, and my break is my focus time divided by it, with the fraction cut off.</p>
+  <div class="ratio">
+    <div><b>25:00</b><span>of focus, stopped when the flow ends</span></div>
+    <div><b>1 / 5</b><span>the RATIO constant in app.js, the one number that sets every break</span></div>
+    <div><b>05:00</b><span>of break, counted down, then back to Ready</span></div>
+  </div>
+  <table class="worked">
+    <tr><th>Focus I stop at</th><th>Math in app.js</th><th>Break I bank</th></tr>
+    <tr><td>25:00</td><td>1500 / 5, floored</td><td>05:00</td></tr>
+    <tr><td>50:00</td><td>3000 / 5, floored</td><td>10:00</td></tr>
+    <tr><td>00:30</td><td>30 / 5, floored</td><td>00:06</td></tr>
+    <tr><td>00:04</td><td>4 / 5, floored to 0</td><td>none, and the app says so</td></tr>
+  </table>
+  <p>The break is not a running balance. I recompute it each time a focus block ends. If I end a break early, I only get credit for the part I used. Reset throws the current phase away on purpose, and focus time before a Reset never reaches the totals.</p>
+  <!-- I copied the two captures below from app.js at head 75fb6dcb370239a55decfc658c1aa1a041924a2c. The first is line 6 on its own. The second is lines 115 to 123, the break computation and the under 5 seconds path, with nothing cut from inside that span. -->
+  <h3>The constant, from app.js line 6</h3>
+  <pre>const RATIO = 5;             // I earn 1 second of break for every 5 seconds of focus. If I change this one number, every break length in the app changes with it.</pre>
+  <h3>Stopping focus, from app.js lines 115 to 123</h3>
+  <pre>    breakSeconds = Math.floor(focusSec / RATIO);
+    log(`Focus: ${fmt(focusSec)} -&gt; earned break: ${fmt(breakSeconds)}`);
+    totals();
+    // I floor the division above, so under 5 seconds of focus earns 0.
+    // I treat that as no break at all instead of starting a 0 second break that ends at once.
+    if (breakSeconds &lt; 1) {
+      toIdle("Under 5 seconds of focus - no break banked.");
+      return;
+    }</pre>
+  <p>Three states hold the whole thing together. The mode variable in app.js is always idle, focus, or break, and a helper named toIdle sends every path back to Ready: break finished, break ended early, focus too short to bank a break, and Reset. I kept the same shape on this page, including the same status lines, so the page clock and the app clock disagree about nothing that matters.</p>
+  <p>Time comes from the wall clock, not from counting ticks. The render step subtracts startedAt from Date.now() every time it draws, on a 250 millisecond interval. A background tab can throttle that interval and make the readout less smooth, but it cannot change Date.now(), so the time stays right.</p>
+</section>
+
+<section class="reveal">
+  <h2>What the app adds</h2>
+  <p>The clock on this page is the timing rule on its own. The app itself, in index.html and app.js at the root of the repository, adds one more room: ambience. I paste a YouTube study space link into a box and the app loads it as an embedded player under the timer, so the room I am working in has a sound and a view to go with the counting.</p>
+  <!-- I left the YouTube player off this page on purpose. This page is about the timing rule, and the embed is the app room, not this page room. Putting a player here would make the notebook carry a second job it does not need, and a reader who wants the ambience should run the app itself. -->
+  <p>I skipped that player here on purpose, and I am saying so plainly instead of letting anyone wonder where it went. This page is about the timing rule. The embed is the app room, not this page room. If you want the ambience, run the app: it is one page of its own, index.html with style.css and app.js at 165 lines, and the player loads there after a pasted link passes a strict check for a v= link, a youtu.be link, an embed link, or a bare 11 character video ID as the whole input.</p>
+  <ul class="facts">
+    <li><b>The app clock is text.</b> style.css gives it tabular numbers, so a 1 takes the same width as an 8 and the readout does not jitter as it counts. I kept tabular numbers on this page for the same reason, only much larger.</li>
+    <li><b>The app log is plain text.</b> Each entry is set with textContent, so log text is never read as markup. My page log does the same.</li>
+    <li><b>The app totals stay in seconds.</b> They round to minutes only when shown, so short sessions do not each round their seconds away. My page totals follow that too.</li>
+  </ul>
+</section>
+
+<section class="reveal">
+  <h2>The hand drawn sheets, as notebook pages</h2>
+  <p>I keep six drawn sheets for this project in Flowmodoro-Timer-Visuals in the repository. I treat them here the way I treat them myself: as notebook pages I drew to think the small tool through, not as screenshots of the app. The app has no screens like these. It has one dark page with a clock on it.</p>
+  <div class="sheets">
+    <figure class="sheet">
+      <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/Flowmodoro-Timer-Visuals/architecture.png" alt="Hand drawn architecture sheet for Flowmodoro-Timer">
+      <figcaption>Architecture. My drawn sheet for how the parts of Flowmodoro-Timer fit together, from Flowmodoro-Timer-Visuals/architecture.png.</figcaption>
+    </figure>
+    <figure class="sheet">
+      <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/Flowmodoro-Timer-Visuals/flowchart.png" alt="Hand drawn flowchart sheet for Flowmodoro-Timer">
+      <figcaption>Flowchart. My drawn sheet for the order of steps in a session, from Flowmodoro-Timer-Visuals/flowchart.png.</figcaption>
+    </figure>
+    <figure class="sheet">
+      <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/Flowmodoro-Timer-Visuals/product-map.png" alt="Hand drawn product map sheet for Flowmodoro-Timer">
+      <figcaption>Product map. My drawn sheet for what the tool covers and what it leaves out, from Flowmodoro-Timer-Visuals/product-map.png.</figcaption>
+    </figure>
+    <figure class="sheet">
+      <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/Flowmodoro-Timer-Visuals/data-flow.png" alt="Hand drawn data flow sheet for Flowmodoro-Timer">
+      <figcaption>Data flow. My drawn sheet for how time and totals move through the app, from Flowmodoro-Timer-Visuals/data-flow.png.</figcaption>
+    </figure>
+    <figure class="sheet">
+      <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/Flowmodoro-Timer-Visuals/statistics.png" alt="Hand drawn statistics sheet for Flowmodoro-Timer">
+      <figcaption>Statistics. My drawn sheet of figures for the project, from Flowmodoro-Timer-Visuals/statistics.png. These are my notebook figures, not measurements taken from your visit to this page.</figcaption>
+    </figure>
+    <figure class="sheet">
+      <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/Flowmodoro-Timer-Visuals/schematic.png" alt="Hand drawn schematic sheet for Flowmodoro-Timer">
+      <figcaption>Schematic. My drawn sheet for the timer layout and its connections, from Flowmodoro-Timer-Visuals/schematic.png.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2>Run it</h2>
+  <p>To run the app itself, open index.html at the root of the repository in a browser. That is the whole install. Or serve the folder and open the local address:</p>
+  <pre><span class="c"># from the repo root</span>
+python3 -m http.server
+<span class="c"># then open http://localhost:8000 in a browser</span></pre>
+  <p>To read this page on its own, open Flowmodoro-Timer-Website/index.html in a browser, or serve that folder the same way and open http://localhost:8000.</p>
+  <div class="chips">
+    <span>JavaScript</span><span>HTML</span><span>CSS</span><span>No build step</span>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2>One honest note</h2>
+  <p class="note">The session log and the totals on this page, and in the app, live only in the browser tab. Closing the tab loses them. I did not add storage, accounts, or sync, because I use this for one sitting at a time and that is the job it was built for. Timing is wall clock based, which is a choice I made in app.js and kept here: a throttled background tab loses smoothness, not accuracy.</p>
+  <p>Code and full history: <a href="https://github.com/Epsilon0xCell/Flowmodoro-Timer">github.com/Epsilon0xCell/Flowmodoro-Timer</a>.</p>
+</section>
+
+<footer>
+  <span>Built by Epsilon0xCell</span>
+  <span>Colophon: I set this page in system fonts on pale paper, with one violet taken from the app, and I let a working clock do the illustrating.</span>
+</footer>
+
+</div>
+<script>
+"use strict";
+// I wrote this script fresh for this page, but I matched it to app.js line by line where the behavior is the same. Focus counts up, RATIO is 5, and stopping focus banks Math.floor(focusSec / RATIO). I left out only the YouTube loader, for the reason I gave in the comment above the ambience section.
+const RATIO = 5;
+let mode = "idle";
+let startedAt = null;
+let breakSeconds = 0;
+let ticker = null;
+let totalFocus = 0, totalBreak = 0;
+const $ = (id) => document.getElementById(id);
+const clock = $("clock"), phase = $("phase"), status = $("status");
+function fmt(sec) {
+  sec = Math.max(0, Math.floor(sec));
+  const m = String(Math.floor(sec / 60)).padStart(2, "0");
+  const s = String(sec % 60).padStart(2, "0");
+  return m + ":" + s;
+}
+function render() {
+  if (mode === "focus") {
+    clock.textContent = fmt((Date.now() - startedAt) / 1000);
+  } else if (mode === "break") {
+    const left = breakSeconds - (Date.now() - startedAt) / 1000;
+    clock.textContent = fmt(left);
+    if (left <= 0) stopBreak(true);
+  }
+}
+function log(text) {
+  const li = document.createElement("li");
+  li.textContent = text;
+  $("logList").prepend(li);
+}
+function totals() {
+  $("totals").textContent =
+    "Total focus: " + Math.round(totalFocus / 60) + " min - Total break: " + Math.round(totalBreak / 60) + " min";
+}
+function startFocus() {
+  mode = "focus";
+  startedAt = Date.now();
+  phase.textContent = "Focusing";
+  status.textContent = "Flow state... stop whenever the flow ends.";
+  $("startBtn").disabled = true;
+  $("breakBtn").disabled = false;
+  $("breakDot").classList.remove("on");
+  ticker = setInterval(render, 250);
+  render();
+}
+function toIdle(statusText) {
+  clearInterval(ticker);
+  mode = "idle";
+  phase.textContent = "Ready";
+  clock.textContent = "00:00";
+  status.textContent = statusText;
+  $("startBtn").disabled = false;
+  $("breakBtn").disabled = true;
+  $("breakBtn").textContent = "Take break";
+  $("breakDot").classList.remove("on");
+}
+function stopBreak(finished) {
+  const used = Math.min(breakSeconds, (Date.now() - startedAt) / 1000);
+  totalBreak += used;
+  log("Break: " + fmt(used) + (finished ? " (complete)" : " (ended early)"));
+  toIdle("Break over. Start the next focus block when ready.");
+  totals();
+}
+$("startBtn").addEventListener("click", startFocus);
+$("breakBtn").addEventListener("click", () => {
+  if (mode === "focus") {
+    const focusSec = (Date.now() - startedAt) / 1000;
+    totalFocus += focusSec;
+    breakSeconds = Math.floor(focusSec / RATIO);
+    log("Focus: " + fmt(focusSec) + " -> earned break: " + fmt(breakSeconds));
+    totals();
+    if (breakSeconds < 1) {
+      toIdle("Under 5 seconds of focus - no break banked.");
+      return;
+    }
+    mode = "break";
+    startedAt = Date.now();
+    phase.textContent = "On break";
+    status.textContent = "Rest. The timer counts down your earned break.";
+    $("breakBtn").textContent = "End break early";
+    $("breakDot").classList.add("on");
+    render();
+  } else if (mode === "break") {
+    stopBreak(false);
+  }
+});
+$("resetBtn").addEventListener("click", () => {
+  toIdle("Press Start focus and work until your flow ends.");
+});
+// I reveal each notebook section once as it scrolls into view. If the reader asked for reduced motion, my CSS already shows everything at once, and I skip the observer here so nothing waits on an animation that will never run.
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.add("seen"); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+} else {
+  document.querySelectorAll(".reveal").forEach((el) => el.classList.add("seen"));
+}
+</script>
+</body>
+</html>
