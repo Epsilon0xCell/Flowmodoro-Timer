@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" width="800" height="260">
+<rect width="800" height="260" fill="#333033"/>
+<g stroke="#4c4448" fill="#463e42"><rect width="800" height="90"/></g>
+<g fill="#ffd88e"><circle cx="90" cy="42" r="6"><animate attributeName="opacity" values="1;0;1" dur="4s" repeatCount="indefinite"/></circle><circle cx="210" cy="42" r="6"><animate attributeName="opacity" values="1;0;1" dur="5s" begin="1s" repeatCount="indefinite"/></circle><circle cx="330" cy="42" r="6"><animate attributeName="opacity" values="1;0;1" dur="6s" begin="2s" repeatCount="indefinite"/></circle><circle cx="450" cy="42" r="6"/><circle cx="570" cy="42" r="6"><animate attributeName="opacity" values="1;0;1" dur="4.5s" begin=".5s" repeatCount="indefinite"/></circle><circle cx="690" cy="42" r="6"/></g>
+<ellipse cx="400" cy="26" rx="70" ry="10" fill="#6a6468" opacity=".6"><animateTransform attributeName="transform" type="rotate" values="0 400 26;360 400 26" dur="24s" repeatCount="indefinite"/></ellipse>
+<polygon points="330,70 470,70 540,190 260,190" fill="#ffe9c4" opacity=".28"><animate attributeName="opacity" values=".18;.34;.18" dur="6s" repeatCount="indefinite"/></polygon>
+<g fill="#c8a24a"><rect x="330" y="150" width="16" height="52"><animate attributeName="y" values="150;162;150" dur="1.8s" repeatCount="indefinite"/></rect><rect x="365" y="150" width="16" height="52"><animate attributeName="y" values="162;150;162" dur="1.8s" repeatCount="indefinite"/></rect><rect x="400" y="150" width="16" height="52"><animate attributeName="y" values="150;162;150" dur="1.8s" begin=".4s" repeatCount="indefinite"/></rect></g>
+<ellipse cx="520" cy="180" rx="52" ry="14" fill="#cfc9c4"/>
+<path d="M480 172 Q520 150 560 172" stroke="#b8b2ac" stroke-width="5" fill="none"><animateTransform attributeName="transform" type="skewX" values="0;4;0" dur="3s" repeatCount="indefinite"/></path>
+<g><rect x="590" y="120" width="90" height="70" fill="#1d1b1d"><animateTransform attributeName="transform" type="rotate" values="0 590 120;-2 590 120;0 590 120" dur="8s" repeatCount="indefinite"/></rect></g>
+<rect y="205" width="800" height="55" fill="#2a2019"/>
+<ellipse cx="150" cy="228" rx="80" ry="18" fill="#1d1b1d" stroke="#c8a24a" stroke-width="2"/>
+<g><rect x="120" y="218" width="10" height="18" fill="#d8dde2"><animateTransform attributeName="transform" type="translate" values="0 0;8 0;0 0" dur="7s" repeatCount="indefinite"/></rect></g>
+<g><rect x="620" y="214" width="52" height="30" fill="#e8e2da"><animateTransform attributeName="transform" type="rotate" values="0 646 229;3 646 229;0 646 229" dur="9s" repeatCount="indefinite"/></rect></g>
+</svg>

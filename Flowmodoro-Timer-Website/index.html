@@ -7,79 +7,28 @@
 <title>Flowmodoro-Timer: the clock is the page</title>
 <meta name="description" content="I rebuilt this page around a working flowmodoro clock. Focus counts up, stopping banks a break at a ratio of 5 to 1, and the break counts down.">
 <style>
-/* I kept the paper pale and the ink quiet because this page is a notebook first. The one loud color is the violet from the app itself, #5b21b6 in style.css, and I use it for the phase line, the buttons, and the break dot, nowhere else by accident. */
-:root{--ink:#1c1c24;--soft:#5d5d6d;--paper:#f7f5ef;--card:#fffdf8;--violet:#5b21b6;--violet-soft:#a78bfa;--line:#ddd7c8}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.65}
-.wrap{max-width:1040px;margin:0 auto;padding:0 28px}
-a{color:var(--violet)}
-header.top{padding:30px 0 0;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.02em}
-.brand img{width:40px;height:40px;object-fit:contain;display:block}
-.top nav a{text-decoration:none;margin-left:18px;font-size:.95rem}
-.top nav a:hover{text-decoration:underline}
-.badges{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 4px}
-.badges img{height:20px}
-.kicker{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet);margin:0 0 12px}
-h1{font-size:2.6rem;line-height:1.1;margin:0 0 16px;font-weight:650;max-width:22ch}
-h2{font-size:1.5rem;margin:0 0 14px;font-weight:650}
-h3{font-size:1.05rem;margin:0 0 8px;font-weight:650}
-p{max-width:44rem}
-.lede{font-size:1.12rem;color:var(--soft);max-width:36rem;margin:0}
-.banner{margin:28px 0 0}
-.banner img{width:100%;display:block;border:1px solid var(--line)}
-.banner figcaption,.sheet figcaption{color:var(--soft);font-size:.92rem;margin-top:8px}
-section{padding:40px 0;border-top:1px solid var(--line)}
-/* I made the clock room a card on the paper, not a dark panel. The app runs its clock on a dark card, and I say that in the text, but on this page I want the readout to feel like a number written large in a notebook margin. */
-.clockroom{background:var(--card);border:1px solid var(--line);padding:30px 28px 26px;margin:34px 0 8px}
-.phase{font-size:.85rem;letter-spacing:.22em;text-transform:uppercase;color:var(--violet);margin:0}
-.clock{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:clamp(4.8rem,14vw,9.5rem);font-weight:700;line-height:1.05;margin:6px 0 4px}
-.status{color:var(--soft);margin:0 0 18px;min-height:1.65em}
-.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-button{background:var(--violet);color:#fff;border:0;border-radius:8px;padding:.62rem 1.15rem;font-size:1rem;cursor:pointer;font:inherit}
-button.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}
-button:disabled{background:#d8d2c2;color:#6d6d7a;cursor:not-allowed;border-color:#d8d2c2}
-.breakdot{width:14px;height:14px;border-radius:50%;background:var(--violet-soft);display:none;margin-left:6px}
-.breakdot.on{display:inline-block;animation:breathe 3.2s ease-in-out infinite}
-@keyframes breathe{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.45);opacity:1}}
-.logwrap{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
-.logwrap ul{list-style:none;padding:0;margin:0 0 10px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.95rem}
-.logwrap li{padding:6px 0;border-bottom:1px solid var(--line)}
-.logwrap li:last-child{border-bottom:0}
-.totals{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.95rem;margin:0}
-.static-rule{color:var(--soft);max-width:44rem;margin:18px 0 0}
-.ratio{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);margin:24px 0;background:var(--card)}
-@media(max-width:760px){.ratio{grid-template-columns:1fr}.ratio div{border-right:0;border-bottom:1px solid var(--line)}.ratio div:last-child{border-bottom:0}}
-.ratio div{padding:20px 22px;border-right:1px solid var(--line)}
-.ratio div:last-child{border-right:0}
-.ratio b{display:block;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.9rem;font-weight:700}
-.ratio span{color:var(--soft);font-size:.95rem}
-table.worked{border-collapse:collapse;width:100%;max-width:44rem;margin:8px 0 20px;background:var(--card)}
-table.worked th,table.worked td{border:1px solid var(--line);padding:10px 14px;text-align:left;font-variant-numeric:tabular-nums}
-table.worked th{font-weight:650}
-code,pre{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
-pre{background:#1c1c24;color:#f0edf7;padding:18px 20px;overflow-x:auto;font-size:.92rem;line-height:1.55}
-pre .c{color:var(--violet-soft)}
-ul.facts{list-style:none;padding:0;margin:0;max-width:46rem}
-ul.facts li{padding:13px 0;border-bottom:1px solid var(--line)}
-ul.facts li:last-child{border-bottom:0}
-.sheets{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-@media(max-width:760px){.sheets{grid-template-columns:1fr}}
-.sheet{margin:0;background:var(--card);border:1px solid var(--line);padding:16px}
-.sheet img{width:100%;display:block}
-.note{border-left:3px solid var(--violet);padding:4px 0 4px 18px;max-width:44rem}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.chips span{border:1px solid var(--ink);padding:4px 13px;border-radius:999px;font-size:.9rem}
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
-.reveal.seen{opacity:1;transform:none}
-footer{padding:34px 0 52px;border-top:1px solid var(--line);color:var(--soft);font-size:.95rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-footer a{text-decoration:none}
-footer a:hover{text-decoration:underline}
-/* I turn the breathing and the reveals off for reduced motion, and I leave the clock alone. The clock is work the reader started with a button, not decoration, so it keeps counting in every mode. */
-@media (prefers-reduced-motion: reduce){
-.breakdot.on{animation:none}
-.reveal{opacity:1;transform:none;transition:none}
-}
+@font-face{font-family:'Cairo Play';src:url('fonts/CairoPlay.ttf') format('truetype')}
+@font-face{font-family:'Alegreya Sans';src:url('fonts/AlegreyaSans-Regular.ttf') format('truetype')}
+@font-face{font-family:'Alegreya Sans';src:url('fonts/AlegreyaSans-Bold.ttf') format('truetype');font-weight:700}
+:root{--bg:#2e2a2c;--panel:#3d383b;--ink:#efe9e4;--blush:#e8b4b8;--rosin:#7a4a3a;--grey:#9a9296;--line:#575053}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Alegreya Sans',sans-serif;line-height:1.6}
+a{color:var(--grey)}a:hover{color:var(--blush)}
+h1,h2,h3,.phase{font-family:'Cairo Play',sans-serif}
+.wrap,main,header,footer{max-width:1080px;margin:0 auto;padding:1rem 5vw}
+img.banner{width:100%;height:auto;border:2px solid var(--line);border-radius:8px}
+.clockroom,.clock{background:radial-gradient(ellipse at 50% 30%,rgba(232,180,184,.28),transparent 65%),var(--panel);border:2px solid var(--line);border-radius:10px;padding:1.4rem;text-align:center}
+.clock,#clock{font-family:'Cairo Play',sans-serif;font-variant-numeric:tabular-nums;font-size:4.2rem}
+button{font-family:'Alegreya Sans',sans-serif;background:linear-gradient(180deg,#c8a24a,#9a7a30);color:#17130c;border:none;border-top:10px solid #e8e2da;border-radius:14px;padding:.6rem 1.2rem;cursor:pointer;box-shadow:inset 0 -6px 0 var(--blush)}
+button:hover{filter:brightness(1.12)}button:active{transform:translateY(4px);box-shadow:inset 0 -2px 0 var(--blush)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--line);padding:.45rem .6rem;text-align:left}
+td:last-child{text-align:right}
+pre,.code,.static-rule{background:#211e20;color:#e8e2da;padding:1rem;border-radius:10px;overflow-x:auto}
+.card,.sheet,.worked,.note{background:var(--panel);border:2px solid #8a7434;border-radius:50% 50% 12px 12px/18px 18px 12px 12px;padding:1rem 1.3rem;margin:1rem 0}
+.sheets{display:grid;gap:1rem}.sheets img,.sheet img{width:100%;height:auto;border-radius:8px;background:#f4f1e8}
+.chips,.badges{display:flex;gap:.5rem;flex-wrap:wrap}.chip,.chips span{background:#211e20;border:1px solid var(--line);border-radius:20px;padding:.2rem .7rem}
+.breakdot,#breakDot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--blush)}
+footer{color:var(--grey);border-top:1px solid var(--line)}
 </style>
 </head>
 <body>

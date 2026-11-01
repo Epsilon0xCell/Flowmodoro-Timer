@@ -1,7 +1,12 @@
-![Banner](banner.png)
+![Intro](intro-banner.png)
 
 # Flowmodoro-Timer
+![Banner](banner.png)
+
+![Scene](scene.svg)
 Custom flowmodoro website utilizing YouTube study spaces to create ambience.
+
+![Separator](sep-heavy.svg)
 
 ## Implementation
 
