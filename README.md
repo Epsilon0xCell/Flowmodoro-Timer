@@ -1,7 +1,9 @@
-![Intro](intro-banner.png)
+![Intro: two instant photos side by side on a desk, the first showing a bright focused desk scene, the second the same desk gone soft and restful with a cushion and a closed notebook, warm flash light, cream polaroid borders](intro-banner.png)
 
 # Flowmodoro-Timer
-![Banner](banner.png)
+
+<p align="center"><img src="logo.png" alt="Flowmodoro-Timer logo: an instant photo with a thick faded cream border, inside it an hourglass whose top bulb glows warm tungsten orange and whose bottom bulb rests in soft teal shadow" width="200"></p>
+![Banner: a study desk at night caught by direct flash, a laptop glow, a mug, and a wall of small instant photos pinned in a row like a timeline of study spaces, warm tungsten orange light with teal shadows, a dusty rose wall](banner.png)
 
 ![Scene](scene.svg)
 Custom flowmodoro website utilizing YouTube study spaces to create ambience.
