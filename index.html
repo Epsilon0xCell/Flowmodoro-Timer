@@ -7,35 +7,39 @@
 <title>Flowmodoro-Timer: the clock is the page</title>
 <meta name="description" content="I rebuilt this page around a working flowmodoro clock. Focus counts up, stopping banks a break at a ratio of 5 to 1, and the break counts down.">
 <style>
-@font-face{font-family:'Cairo Play';src:url('fonts/CairoPlay.ttf') format('truetype')}
-@font-face{font-family:'Alegreya Sans';src:url('fonts/AlegreyaSans-Regular.ttf') format('truetype')}
-@font-face{font-family:'Alegreya Sans';src:url('fonts/AlegreyaSans-Bold.ttf') format('truetype');font-weight:700}
-:root{--bg:#2e2a2c;--panel:#3d383b;--ink:#efe9e4;--blush:#e8b4b8;--rosin:#7a4a3a;--grey:#9a9296;--line:#575053}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Alegreya Sans',sans-serif;line-height:1.6}
-a{color:var(--grey)}a:hover{color:var(--blush)}
-h1,h2,h3,.phase{font-family:'Cairo Play',sans-serif}
+@font-face{font-family:'Caveat';src:url('fonts/Caveat-Regular.ttf') format('truetype');font-weight:400}
+@font-face{font-family:'Caveat';src:url('fonts/Caveat-Bold.ttf') format('truetype');font-weight:700}
+@font-face{font-family:'Mulish';src:url('fonts/Mulish-Regular.ttf') format('truetype');font-weight:400}
+@font-face{font-family:'Mulish';src:url('fonts/Mulish-Bold.ttf') format('truetype');font-weight:700}
+:root{--bg:#3a2e2c;--panel:#f6efe0;--ink:#f2e9d8;--orange:#e07b39;--teal:#2f6f6a;--rose:#c98a8a;--dark:#3a2c22;--line:#6a5850}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Mulish',sans-serif;line-height:1.6}
+a{color:#eec27f}a:hover{color:var(--rose)}
+h1,h2,h3,.phase{font-family:'Caveat',cursive;font-weight:700}
+h1{font-size:2.9rem;line-height:1.1}h2{font-size:2.1rem}
 .wrap,main,header,footer{max-width:1080px;margin:0 auto;padding:1rem 5vw}
-img.banner{width:100%;height:auto;border:2px solid var(--line);border-radius:8px}
-.clockroom,.clock{background:radial-gradient(ellipse at 50% 30%,rgba(232,180,184,.28),transparent 65%),var(--panel);border:2px solid var(--line);border-radius:10px;padding:1.4rem;text-align:center}
-.clock,#clock{font-family:'Cairo Play',sans-serif;font-variant-numeric:tabular-nums;font-size:4.2rem}
-button{font-family:'Alegreya Sans',sans-serif;background:linear-gradient(180deg,#c8a24a,#9a7a30);color:#17130c;border:none;border-top:10px solid #e8e2da;border-radius:14px;padding:.6rem 1.2rem;cursor:pointer;box-shadow:inset 0 -6px 0 var(--blush)}
-button:hover{filter:brightness(1.12)}button:active{transform:translateY(4px);box-shadow:inset 0 -2px 0 var(--blush)}
+.kicker{font-family:'Caveat',cursive;font-size:1.5rem;color:var(--orange)}
+img.banner{width:100%;height:auto;border:10px solid #fff;border-bottom:44px solid #fff;border-radius:2px;box-shadow:0 8px 22px rgba(0,0,0,.5)}
+.clockroom,.clock{background:var(--panel);color:var(--dark);border:12px solid #fff;border-bottom:52px solid #fff;border-radius:2px;padding:1.4rem;text-align:center;box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.clock,#clock{font-family:'Caveat',cursive;font-weight:700;font-size:4.6rem;color:var(--dark)}
+button{font-family:'Mulish',sans-serif;font-weight:700;background:var(--orange);color:#fff8ec;border:none;border-radius:999px;padding:.6rem 1.3rem;cursor:pointer;box-shadow:0 4px 0 var(--teal)}
+button:hover{filter:brightness(1.1)}button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--teal)}
 button:disabled{opacity:.45}
 table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--line);padding:.45rem .6rem;text-align:left}
 td:last-child{text-align:right}
-pre,.code,.static-rule{background:#211e20;color:#e8e2da;padding:1rem;border-radius:10px;overflow-x:auto}
-.card,.sheet,.worked,.note{background:var(--panel);border:2px solid #8a7434;border-radius:50% 50% 12px 12px/18px 18px 12px 12px;padding:1rem 1.3rem;margin:1rem 0}
-.sheets{display:grid;gap:1rem}.sheets img,.sheet img{width:100%;height:auto;border-radius:8px;background:#f4f1e8}
-.chips,.badges{display:flex;gap:.5rem;flex-wrap:wrap}.chip,.chips span{background:#211e20;border:1px solid var(--line);border-radius:20px;padding:.2rem .7rem}
-.breakdot,#breakDot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--blush)}
-footer{color:var(--grey);border-top:1px solid var(--line)}
+pre,.code,.static-rule{background:#241d1b;color:#e8e2da;padding:1rem;border-radius:8px;overflow-x:auto}
+.card,.sheet,.worked,.note{background:var(--panel);color:var(--dark);border:2px solid #fff;border-radius:3px;padding:1rem 1.3rem;margin:1rem 0;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.card h2,.card h3,.sheet h2,.sheet h3,.worked h2,.worked h3,.note h2,.note h3{color:var(--dark)}
+.sheets{display:grid;gap:1rem}.sheets img,.sheet img{width:100%;height:auto;border-radius:2px;background:#f4f1e8}
+.chips,.badges{display:flex;gap:.5rem;flex-wrap:wrap}.chip,.chips span{background:#241d1b;border:1px solid var(--rose);color:var(--ink);border-radius:20px;padding:.2rem .7rem}
+.breakdot,#breakDot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--rose)}
+footer{color:#bfae9d;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header class="top">
-  <div class="brand"><img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/logo.png" alt="Flowmodoro-Timer logo, a small mark from the repository"> Flowmodoro-Timer</div>
+  <div class="brand"><img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/logo.png" alt="Flowmodoro-Timer logo: an instant photo with a thick faded cream border, inside it an hourglass whose top bulb glows warm tungsten orange and whose bottom bulb rests in soft teal shadow"> Flowmodoro-Timer</div>
   <nav>
     <a href="https://github.com/Epsilon0xCell/Flowmodoro-Timer">Repository</a>
     <a href="https://github.com/Epsilon0xCell">My GitHub profile</a>
@@ -56,7 +60,7 @@ footer{color:var(--grey);border-top:1px solid var(--line)}
 </div>
 
 <figure class="banner">
-  <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/banner.png" alt="Flowmodoro-Timer banner image from the repository">
+  <img src="https://raw.githubusercontent.com/Epsilon0xCell/Flowmodoro-Timer/main/banner.png" alt="Flowmodoro-Timer banner: a study desk at night caught by direct flash, a laptop glow, a mug, and a wall of small instant photos pinned in a row like a timeline of study spaces">
   <figcaption>My banner for the project, from banner.png in the repository. The app itself is plainer than this: a text clock in a dark card, three buttons, and a YouTube box.</figcaption>
 </figure>
 
@@ -177,7 +181,7 @@ python3 -m http.server
 
 <footer>
   <span>Built by Epsilon0xCell</span>
-  <span>Colophon: I set this page in system fonts on pale paper, with one violet taken from the app, and I let a working clock do the illustrating.</span>
+  <span>Colophon: I set this page in Caveat (headings) and Mulish (reading text), both SIL Open Font License 1.1, self-hosted in the site fonts folder with their licence texts, on faded polaroid cream with tungsten orange and teal from the photos, and I let a working clock do the illustrating.</span>
 </footer>
 
 </div>
